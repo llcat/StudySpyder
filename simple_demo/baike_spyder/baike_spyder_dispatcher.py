@@ -1,6 +1,9 @@
 # -*- coding:utf8 -*-
 #百科爬虫调度器
-from baike_spyder import *
+import baike_spyder_urlmanager
+import baike_spyder_htmldownloader
+import baike_spyder_htmlpraser
+import baike_spyder_outputer
 class Dispatcher(object):
 
     #初始化需要的模块
@@ -8,29 +11,32 @@ class Dispatcher(object):
         self.urlmanager = baike_spyder_urlmanager.UrlManager()
         self.htmldownloader = baike_spyder_htmldownloader.HtmlDownLoader()
         self.htmlpraser = baike_spyder_htmlpraser.HtmlPraser()
-        self.outputer = baike_spyder_outputer.Outputer()
+        self.outputer = baike_spyder_outputer.HtmlOutputer()
 
     #抓取操作
     def craw(self,enter_url):
         count = 1
-        urlmanager.add_new_url(enter_url)
-        while urlmanager.has_new_url():
+        self.urlmanager.add_new_url(enter_url)
+        while self.urlmanager.has_new_url():
             try:
-                current_url = urlmanager.get_new_url()
-                print("第%d条,url = %s"%(count,current_url))
-                html_content = htmldownloader.download(current_url)
-                contain_urls,target_data = htmlpraser.prase(html_content)
-                urlmanager.add_new_urls(contain_urls)
-                outputer.collect_data(target_data)
-                if count == 1000:
+                if count == 50:
                     break
+                current_url = self.urlmanager.get_new_url()
+                #print(current_url)
+                print("第%d条,url = %s"%(count,current_url))
+                count = count+1
+                html_content = self.htmldownloader.download(current_url)
+                #print(html_content)
+                contain_urls,target_data = self.htmlpraser.prase(html_content)
+                self.urlmanager.add_new_urls(contain_urls)
+                self.outputer.collect_data(target_data)
+                #print(self.outputer.get_collected_data())
             except:
                 print("craw %d failed"%count)
-            finally:
-                count = count+1       
-        outputer.output_html()
+        #print(self.outputer.get_collected_data())
+        self.outputer.output_html()
      
 if __name__ == "__main__":
-    enter_url = "http://baike.baidu.com/view/21087.htm"
+    enter_url = "http://baike.baidu.com/view/3105539.htm"
     dispatcher = Dispatcher()
-    dispatcher.craw()
+    dispatcher.craw(enter_url)

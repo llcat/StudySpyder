@@ -8,8 +8,14 @@ class HtmlDownLoader(object):
         pass
 
     def download(self,url):
-        response = request.urlopen()
+        response = request.urlopen(url)
         if response.getcode() == 200:
-            return response.read()
+            html_content = response.read()
+            #print(html_content)
+            return html_content
         else:
             return None
+
+
+##obj = HtmlDownLoader()
+##obj.download("http://baike.baidu.com/view/21087.htm")
