@@ -34,7 +34,8 @@ class Dispatcher(object):
             except:
                 print("craw %d failed"%count)
         #print(self.outputer.get_collected_data())
-        self.outputer.output_html()
+        #self.outputer.output_html()
+        self.outputer.output2mongo()
      
 if __name__ == "__main__":
     enter_url = "http://baike.baidu.com/view/3105539.htm"

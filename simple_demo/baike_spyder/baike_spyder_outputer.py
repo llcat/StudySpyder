@@ -1,5 +1,7 @@
 # -*- coding:utf8 -*-
 #输出器，输出爬取的数据到html文件中
+import baike_spyder_dao
+
 class HtmlOutputer(object):
 
     def __init__(self):
@@ -14,6 +16,12 @@ class HtmlOutputer(object):
 
     def get_collected_data(self):
         return self.collected_data
+
+    def output2mongo(self):
+        mongo_manager = baike_spyder_dao.MongoManager()
+        coll = mongo_manager.workCollection("baikespyder","title_summary")
+        for data in self.collected_data:
+            coll.insert_one(data)
 
     def output_html(self):
         html_file = open('collect_data.html','w')

@@ -1,6 +1,7 @@
 # coding:utf8 -*-
 # 百科爬虫 url管理器
-
+#目前的url是采用的最简单的管理方式
+#下一步应该确保对于已经采集过得页面，在下次启动爬虫时不再对他采集
 class UrlManager(object):
     
     def __init__(self):
