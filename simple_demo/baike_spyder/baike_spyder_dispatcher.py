@@ -4,11 +4,12 @@ import baike_spyder_urlmanager
 import baike_spyder_htmldownloader
 import baike_spyder_htmlpraser
 import baike_spyder_outputer
+import baike_spyder_dao
 class Dispatcher(object):
 
     #初始化需要的模块
     def __init__(self):
-        self.urlmanager = baike_spyder_urlmanager.UrlManager()
+        self.urlmanager = baike_spyder_urlmanager.UrlManager(baike_spyder_dao.MongoManager())
         self.htmldownloader = baike_spyder_htmldownloader.HtmlDownLoader()
         self.htmlpraser = baike_spyder_htmlpraser.HtmlPraser()
         self.outputer = baike_spyder_outputer.HtmlOutputer()
@@ -19,7 +20,7 @@ class Dispatcher(object):
         self.urlmanager.add_new_url(enter_url)
         while self.urlmanager.has_new_url():
             try:
-                if count == 50:
+                if count == 2:
                     break
                 current_url = self.urlmanager.get_new_url()
                 #print(current_url)
@@ -33,6 +34,7 @@ class Dispatcher(object):
                 #print(self.outputer.get_collected_data())
             except:
                 print("craw %d failed"%count)
+                break
         #print(self.outputer.get_collected_data())
         #self.outputer.output_html()
         self.outputer.output2mongo()
